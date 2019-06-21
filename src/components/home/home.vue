@@ -4,10 +4,12 @@
       <tophead></tophead>
     </el-header>
     <el-container>
-      <sidebar></sidebar>
-      <el-container>
-        <el-main>Main</el-main>
-      </el-container>
+      <el-aside width="200px">
+        <sidebar></sidebar>
+      </el-aside>
+      <el-main>
+        <router-view></router-view>
+      </el-main>
     </el-container>
   </el-container>
 </template>
@@ -58,7 +60,6 @@ export default {
   background-color: #e9eef3;
   color: #333;
   text-align: center;
-  line-height: 160px;
   height: 100%;
 }
 .head img {
