@@ -1,93 +1,10 @@
 <template>
   <el-container>
     <el-header>
-      <el-row class="head">
-        <el-col :span="4">
-          <div class="grid-content bg-purple">
-            <img src="../../assets/img/logo.png" alt>
-          </div>
-        </el-col>
-        <el-col :span="16">
-          <div class="grid-content bg-purple-light">
-            <h1>电商管理系统</h1>
-          </div>
-        </el-col>
-        <el-col :span="4">
-          <div class="grid-content bg-purple">
-            <h3>退出</h3>
-          </div>
-        </el-col>
-      </el-row>
+      <tophead></tophead>
     </el-header>
     <el-container>
-      <el-aside width="200px">
-        <el-menu :router='true' :unique-opened='true' class="el-menu-vertical-demo">
-          <el-submenu index="1">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>用户管理</span>
-            </template>
-            <el-menu-item-group>
-              <el-menu-item index="1-1">
-                <i class="el-icon-menu"></i>
-                用户列表</el-menu-item>
-            </el-menu-item-group>
-          </el-submenu>
-          <el-submenu index="2">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>权限管理</span>
-            </template>
-            <el-menu-item-group>
-              <el-menu-item index="2-1">
-                <i class="el-icon-menu"></i>
-                角色列表</el-menu-item>
-                 <el-menu-item index="2-2">
-                <i class="el-icon-menu"></i>
-                权限列表</el-menu-item>
-            </el-menu-item-group>
-          </el-submenu>
-          <el-submenu index="3">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>商品管理</span>
-            </template>
-            <el-menu-item-group>
-              <el-menu-item index="3-1">
-                <i class="el-icon-menu"></i>
-                商品列表</el-menu-item>
-                 <el-menu-item index="3-2">
-                <i class="el-icon-menu"></i>
-                分类参数</el-menu-item>
-                <el-menu-item index="3-3">
-                <i class="el-icon-menu"></i>
-                商品分类</el-menu-item>
-            </el-menu-item-group>
-          </el-submenu>
-          <el-submenu index="4">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>订单管理</span>
-            </template>
-            <el-menu-item-group>
-              <el-menu-item index="4-1">
-                <i class="el-icon-menu"></i>
-                订单列表</el-menu-item>
-            </el-menu-item-group>
-          </el-submenu>
-          <el-submenu index="5">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>数据统计</span>
-            </template>
-            <el-menu-item-group>
-              <el-menu-item index="4-1">
-                <i class="el-icon-menu"></i>
-                数据报表</el-menu-item>
-            </el-menu-item-group>
-          </el-submenu>
-        </el-menu>
-      </el-aside>
+     <sidebar></sidebar>
       <el-container>
         <el-main>Main</el-main>
       </el-container>
@@ -96,7 +13,14 @@
 </template>
 
 <script>
-export default {};
+import tophead from "@/components/layout/tophead";
+import sidebar from "@/components/layout/sidebar";
+export default {
+  components:{
+    tophead,
+    sidebar
+  }
+};
 </script>
 
 <style>
