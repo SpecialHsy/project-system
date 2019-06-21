@@ -11,12 +11,12 @@
     <div style="margin-top: 15px;">
       <el-row>
         <el-col :span="6">
-          <el-input placeholder="请输入内容" class="input-with-select">
-            <el-button slot="append" icon="el-icon-search"></el-button>
+          <el-input placeholder="请输入内容" class="input-with-select" v-model="query">
+            <el-button slot="append" icon="el-icon-search" @click.prevent="search"></el-button>
           </el-input>
         </el-col>
         <el-col :span="4">
-          <el-button type="success" plain>添加用户</el-button>
+          <el-button type="success" plain @click="open">添加用户</el-button>
         </el-col>
       </el-row>
     </div>
@@ -41,7 +41,36 @@
       </el-table-column>
     </el-table>
     <!-- 分页区 -->
-    <el-pagination></el-pagination>
+    <el-pagination
+      @current-change="currPage"
+      @size-change="sizeChange"
+      :current-page="pagenum"
+      :page-sizes="pagesizes"
+      :page-size="pagesize"
+      :total="total"
+      layout="total, sizes, prev, pager, next, jumper"
+    ></el-pagination>
+    <!-- 对话框 -->
+    <el-dialog title="添加用户" :visible.sync="adddialog">
+      <el-form>
+        <el-form-item label="用户名" :label-width="formLabelWidth">
+          <el-input autocomplete="off" v-model="userinfo.username"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" :label-width="formLabelWidth">
+          <el-input autocomplete="off" v-model="userinfo.password"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" :label-width="formLabelWidth">
+          <el-input autocomplete="off" v-model="userinfo.email"></el-input>
+        </el-form-item>
+        <el-form-item label="电话" :label-width="formLabelWidth">
+          <el-input autocomplete="off" v-model="userinfo.mobile"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="addcancle">取 消</el-button>
+        <el-button type="primary" @click.prevent="adduser">确 定</el-button>
+      </div>
+    </el-dialog>
   </el-card>
 </template>
 
@@ -51,8 +80,24 @@ export default {
     return {
       tableData: [],
       query: "",
+      // 当前页
       pagenum: 1,
-      pagesize: 5
+      // 页容量
+      pagesize: 5,
+      // 页容量选项
+      pagesizes: [3, 5, 10],
+      // 总条数
+      total: 0,
+      // 对话框
+      adddialog: false,
+      // 表头宽
+      formLabelWidth: "80px",
+      userinfo: {
+        username: "",
+        password: "",
+        email: "",
+        mobile: ""
+      }
     };
   },
   methods: {
@@ -69,6 +114,43 @@ export default {
         let { data, meta } = res.data;
         if (meta.status === 200) {
           this.tableData = data.users;
+          this.total = data.total;
+        }
+      });
+    },
+    currPage(currentPage) {
+      this.pagenum = currentPage;
+      this.getdata();
+    },
+    sizeChange(size) {
+      this.pagesize = size;
+      this.getdata();
+    },
+    search() {
+      this.getdata();
+    },
+    open() {
+      this.adddialog = true;
+    },
+    addcancle() {
+      this.adddialog = false;
+    },
+    adduser() {
+      this.$http({
+        method: "post",
+        url: "http://localhost:8888/api/private/v1/users",
+        data: this.userinfo,
+        headers: {
+          Authorization: localStorage.getItem("token")
+        }
+      }).then(res => {
+        let { data, meta } = res.data;
+        if (meta.status === 201) {
+          this.adddialog = false;
+          this.getdata();
+          for (const key in this.userinfo) {
+            this.userinfo[key] = "";
+          }
         }
       });
     }
