@@ -21,83 +21,69 @@
     </el-header>
     <el-container>
       <el-aside width="200px">
-        <el-menu default-active="2" class="el-menu-vertical-demo">
+        <el-menu :router='true' :unique-opened='true' class="el-menu-vertical-demo">
           <el-submenu index="1">
             <template slot="title">
               <i class="el-icon-location"></i>
               <span>用户管理</span>
             </template>
             <el-menu-item-group>
-              <template slot="title">分组一</template>
-              <el-menu-item index="1-1">选项1</el-menu-item>
-              <el-menu-item index="1-2">选项2</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="分组2">
-              <el-menu-item index="1-3">选项3</el-menu-item>
+              <el-menu-item index="1-1">
+                <i class="el-icon-menu"></i>
+                用户列表</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
-        </el-menu>
-        <el-menu default-active="2" class="el-menu-vertical-demo">
-          <el-submenu index="1">
+          <el-submenu index="2">
             <template slot="title">
               <i class="el-icon-location"></i>
               <span>权限管理</span>
             </template>
             <el-menu-item-group>
-              <template slot="title">分组一</template>
-              <el-menu-item index="1-1">选项1</el-menu-item>
-              <el-menu-item index="1-2">选项2</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="分组2">
-              <el-menu-item index="1-3">选项3</el-menu-item>
+              <el-menu-item index="2-1">
+                <i class="el-icon-menu"></i>
+                角色列表</el-menu-item>
+                 <el-menu-item index="2-2">
+                <i class="el-icon-menu"></i>
+                权限列表</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
-        </el-menu>
-        <el-menu default-active="2" class="el-menu-vertical-demo">
-          <el-submenu index="1">
+          <el-submenu index="3">
             <template slot="title">
               <i class="el-icon-location"></i>
               <span>商品管理</span>
             </template>
             <el-menu-item-group>
-              <template slot="title">分组一</template>
-              <el-menu-item index="1-1">选项1</el-menu-item>
-              <el-menu-item index="1-2">选项2</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="分组2">
-              <el-menu-item index="1-3">选项3</el-menu-item>
+              <el-menu-item index="3-1">
+                <i class="el-icon-menu"></i>
+                商品列表</el-menu-item>
+                 <el-menu-item index="3-2">
+                <i class="el-icon-menu"></i>
+                分类参数</el-menu-item>
+                <el-menu-item index="3-3">
+                <i class="el-icon-menu"></i>
+                商品分类</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
-        </el-menu>
-        <el-menu default-active="2" class="el-menu-vertical-demo">
-          <el-submenu index="1">
+          <el-submenu index="4">
             <template slot="title">
               <i class="el-icon-location"></i>
               <span>订单管理</span>
             </template>
             <el-menu-item-group>
-              <template slot="title">分组一</template>
-              <el-menu-item index="1-1">选项1</el-menu-item>
-              <el-menu-item index="1-2">选项2</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="分组2">
-              <el-menu-item index="1-3">选项3</el-menu-item>
+              <el-menu-item index="4-1">
+                <i class="el-icon-menu"></i>
+                订单列表</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
-        </el-menu>
-        <el-menu default-active="2" class="el-menu-vertical-demo">
-          <el-submenu index="1">
+          <el-submenu index="5">
             <template slot="title">
               <i class="el-icon-location"></i>
               <span>数据统计</span>
             </template>
             <el-menu-item-group>
-              <template slot="title">分组一</template>
-              <el-menu-item index="1-1">选项1</el-menu-item>
-              <el-menu-item index="1-2">选项2</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="分组2">
-              <el-menu-item index="1-3">选项3</el-menu-item>
+              <el-menu-item index="4-1">
+                <i class="el-icon-menu"></i>
+                数据报表</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
         </el-menu>
@@ -128,7 +114,6 @@ export default {};
 .el-aside {
   background-color: #fff;
   color: #333;
-  text-align: center;
   line-height: 200px;
   height: 100%;
 }
@@ -156,8 +141,5 @@ export default {};
   line-height: 60px;
   float: right;
   color: rgb(0, 89, 255);
-}
-.el-submenu__title {
-  padding: 0 45px;
 }
 </style>
