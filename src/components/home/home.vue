@@ -4,7 +4,7 @@
       <tophead></tophead>
     </el-header>
     <el-container>
-     <sidebar></sidebar>
+      <sidebar></sidebar>
       <el-container>
         <el-main>Main</el-main>
       </el-container>
@@ -16,9 +16,21 @@
 import tophead from "@/components/layout/tophead";
 import sidebar from "@/components/layout/sidebar";
 export default {
-  components:{
+  components: {
     tophead,
     sidebar
+  },
+  methods: {
+    lode() {
+      let token = localStorage.getItem("token");
+      if (!token) {
+        this.$message.error("您还没有登录,请先登录");
+        this.$router.push("/login");
+      }
+    }
+  },
+  mounted() {
+    this.lode();
   }
 };
 </script>
@@ -64,6 +76,9 @@ export default {
   padding: 0;
   line-height: 60px;
   float: right;
-  color: rgb(0, 89, 255);
+}
+.head h3 a {
+  color: rgb(0, 60, 255);
+  text-decoration: none;
 }
 </style>
