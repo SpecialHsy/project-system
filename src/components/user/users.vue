@@ -172,6 +172,10 @@ export default {
       }).then(res => {
         let { data, meta } = res.data;
         if (meta.status === 201) {
+          this.$message({
+            message: meta.msg,
+            type: "success"
+          });
           this.adddialog = false;
           this.getdata();
           for (const key in this.userinfo) {
