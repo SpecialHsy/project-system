@@ -33,11 +33,13 @@
         </template>
       </el-table-column>
       <el-table-column label="操作">
-        <el-row>
-          <el-button type="primary" icon="el-icon-edit" plain></el-button>
-          <el-button type="success" icon="el-icon-check" plain></el-button>
-          <el-button type="danger" icon="el-icon-delete" plain></el-button>
-        </el-row>
+        <template slot-scope="scope">
+          <el-row>
+            <el-button type="primary" icon="el-icon-edit" plain @click="edit(scope.row.id)"></el-button>
+            <el-button type="success" icon="el-icon-check" plain></el-button>
+            <el-button type="danger" icon="el-icon-delete" plain @click="remove(scope.row.id)"></el-button>
+          </el-row>
+        </template>
       </el-table-column>
     </el-table>
     <!-- 分页区 -->
@@ -71,6 +73,24 @@
         <el-button type="primary" @click.prevent="adduser">确 定</el-button>
       </div>
     </el-dialog>
+    <el-dialog title="修改用户" :visible.sync="editdialog">
+      <el-form>
+        <el-input autocomplete="off" v-model="userinfo.id" type="hidden"></el-input>
+        <el-form-item label="用户名" :label-width="formLabelWidth">
+          <el-input autocomplete="off" v-model="userinfo.username"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" :label-width="formLabelWidth">
+          <el-input autocomplete="off" v-model="userinfo.email"></el-input>
+        </el-form-item>
+        <el-form-item label="电话" :label-width="formLabelWidth">
+          <el-input autocomplete="off" v-model="userinfo.mobile"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="editcancle">取 消</el-button>
+        <el-button type="primary" @click.prevent="edituser(id)">确 定</el-button>
+      </div>
+    </el-dialog>
   </el-card>
 </template>
 
@@ -90,14 +110,17 @@ export default {
       total: 0,
       // 对话框
       adddialog: false,
+      editdialog: false,
       // 表头宽
       formLabelWidth: "80px",
       userinfo: {
+        id: "",
         username: "",
         password: "",
         email: "",
         mobile: ""
-      }
+      },
+      id: ""
     };
   },
   methods: {
@@ -131,6 +154,9 @@ export default {
     },
     open() {
       this.adddialog = true;
+      for (const key in this.userinfo) {
+        this.userinfo[key] = "";
+      }
     },
     addcancle() {
       this.adddialog = false;
@@ -152,6 +178,71 @@ export default {
             this.userinfo[key] = "";
           }
         }
+      });
+    },
+    remove(id) {
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        this.$http({
+          method: "delete",
+          url: "http://localhost:8888/api/private/v1/users/" + id,
+          headers: {
+            Authorization: localStorage.getItem("token")
+          }
+        }).then(res => {
+          let { data, meta } = res.data;
+          if (meta.status === 200) {
+            if (this.total == 6) {
+              this.pagenum = 1;
+              this.getdata();
+            }
+            this.getdata();
+            this.$message({
+              type: "success",
+              message: "删除成功!"
+            });
+          }
+        });
+      });
+    },
+    edit(id) {
+      this.editdialog = true;
+      this.$http({
+        method: "get",
+        url: "http://localhost:8888/api/private/v1/users/" + id,
+        headers: {
+          Authorization: localStorage.getItem("token")
+        }
+      }).then(res => {
+        let { data, meta } = res.data;
+        this.userinfo.id = data.id;
+        this.userinfo.username = data.username;
+        this.userinfo.email = data.email;
+        this.userinfo.mobile = data.mobile;
+      });
+    },
+    editcancle() {
+      this.editdialog = false;
+    },
+    edituser(id) {
+      id = this.userinfo.id;
+      this.$http({
+        method: "put",
+        url: "http://localhost:8888/api/private/v1/users/" + id,
+        data: this.userinfo,
+        headers: {
+          Authorization: localStorage.getItem("token")
+        }
+      }).then(res => {
+        this.$message({
+          message: "修改成功",
+          type: "success"
+        });
+        this.editdialog = false;
+        this.getdata();
       });
     }
   },
