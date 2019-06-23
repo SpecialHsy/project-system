@@ -29,15 +29,20 @@
       <el-table-column label="用户状态">
         <template slot-scope="scope">
           <!-- {{scope.row}} -->
-          <el-switch v-model="scope.row.mg_state" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+          <el-switch
+            v-model="scope.row.mg_state"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            @change="openOff(scope.row.id,scope.row.mg_state)"
+          ></el-switch>
         </template>
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-row>
             <el-button type="primary" icon="el-icon-edit" plain @click="edit(scope.row.id)"></el-button>
-            <el-button type="success" icon="el-icon-check" plain></el-button>
             <el-button type="danger" icon="el-icon-delete" plain @click="remove(scope.row.id)"></el-button>
+            <el-button type="success" icon="el-icon-check" plain @click="setrule(scope.row.id)"></el-button>
           </el-row>
         </template>
       </el-table-column>
@@ -54,14 +59,14 @@
     ></el-pagination>
     <!-- 对话框 -->
     <el-dialog title="添加用户" :visible.sync="adddialog">
-      <el-form>
-        <el-form-item label="用户名" :label-width="formLabelWidth">
+      <el-form :model="userinfo" ref="ruleForm" :rules="rules">
+        <el-form-item label="用户名" :label-width="formLabelWidth" prop="username">
           <el-input autocomplete="off" v-model="userinfo.username"></el-input>
         </el-form-item>
-        <el-form-item label="密码" :label-width="formLabelWidth">
+        <el-form-item label="密码" :label-width="formLabelWidth" prop="password">
           <el-input autocomplete="off" v-model="userinfo.password"></el-input>
         </el-form-item>
-        <el-form-item label="邮箱" :label-width="formLabelWidth">
+        <el-form-item label="邮箱" :label-width="formLabelWidth" prop="email">
           <el-input autocomplete="off" v-model="userinfo.email"></el-input>
         </el-form-item>
         <el-form-item label="电话" :label-width="formLabelWidth">
@@ -69,17 +74,17 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="addcancle">取 消</el-button>
+        <el-button @click="adddialog=false">取 消</el-button>
         <el-button type="primary" @click.prevent="adduser">确 定</el-button>
       </div>
     </el-dialog>
     <el-dialog title="修改用户" :visible.sync="editdialog">
-      <el-form>
+      <el-form :model="userinfo" ref="ruleForm" :rules="rules">
         <el-input autocomplete="off" v-model="userinfo.id" type="hidden"></el-input>
         <el-form-item label="用户名" :label-width="formLabelWidth">
-          <el-input autocomplete="off" v-model="userinfo.username"></el-input>
+          <el-input autocomplete="off" v-model="userinfo.username" disabled></el-input>
         </el-form-item>
-        <el-form-item label="邮箱" :label-width="formLabelWidth">
+        <el-form-item label="邮箱" :label-width="formLabelWidth" prop="email">
           <el-input autocomplete="off" v-model="userinfo.email"></el-input>
         </el-form-item>
         <el-form-item label="电话" :label-width="formLabelWidth">
@@ -87,8 +92,31 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="editcancle">取 消</el-button>
+        <el-button @click="editdialog=false">取 消</el-button>
         <el-button type="primary" @click.prevent="edituser(id)">确 定</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog title="分配角色" :visible.sync="ruledialog">
+      <el-form :model="ruleinfo">
+        <el-form-item label="用户名" :label-width="formLabelWidth">
+          {{ruleinfo.username}}
+          <el-input autocomplete="off" v-model="ruleinfo.username" :disabled="true" type="hidden"></el-input>
+        </el-form-item>
+        <el-form-item label="选择角色" label-width="90px">
+          <el-select v-model="ruleinfo.rid" placeholder="请选择">
+            <el-option label="请选择" :value="-1"></el-option>
+            <el-option
+              v-for="item in selectlist"
+              :key="item.id"
+              :label="item.roleName"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="ruledialog=false">取 消</el-button>
+        <el-button type="primary" @click="set">确 定</el-button>
       </div>
     </el-dialog>
   </el-card>
@@ -111,6 +139,7 @@ export default {
       // 对话框
       adddialog: false,
       editdialog: false,
+      ruledialog: false,
       // 表头宽
       formLabelWidth: "80px",
       userinfo: {
@@ -120,70 +149,96 @@ export default {
         email: "",
         mobile: ""
       },
-      id: ""
+      ruleinfo: {
+        username: "",
+        id: "",
+        rid: ""
+      },
+      selectlist: [],
+      id: "",
+      rules: {
+        username: [
+          { required: true, message: "请输入用户名", trigger: "blur" },
+          { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" }
+        ],
+        password: [{ required: true, message: "请输入密码", trigger: "blur" }],
+        email: [
+          { type: "email", message: "请输入正确的邮箱地址", trigger: "blur" }
+        ]
+      }
     };
   },
   methods: {
+    // 获取数据并渲染
     getdata() {
       this.$http({
         method: "get",
-        url: `http://localhost:8888/api/private/v1/users?query=${
-          this.query
-        }&pagenum=${this.pagenum}&pagesize=${this.pagesize}`,
-        headers: {
-          Authorization: localStorage.getItem("token")
-        }
+        url: `/users?query=${this.query}&pagenum=${this.pagenum}&pagesize=${
+          this.pagesize
+        }`
       }).then(res => {
         let { data, meta } = res.data;
         if (meta.status === 200) {
+          if (data.users.length === 0 && this.pagenum != 1) {
+            this.pagenum--;
+            this.getdata();
+            return;
+          }
           this.tableData = data.users;
           this.total = data.total;
         }
       });
     },
+    // 页码更改
     currPage(currentPage) {
       this.pagenum = currentPage;
       this.getdata();
     },
+    // 页容量更改
     sizeChange(size) {
       this.pagesize = size;
       this.getdata();
     },
+    // 搜索
     search() {
       this.getdata();
     },
+    // 打开添加面板
     open() {
       this.adddialog = true;
       for (const key in this.userinfo) {
         this.userinfo[key] = "";
       }
     },
-    addcancle() {
-      this.adddialog = false;
-    },
+    // 添加用户
     adduser() {
-      this.$http({
-        method: "post",
-        url: "http://localhost:8888/api/private/v1/users",
-        data: this.userinfo,
-        headers: {
-          Authorization: localStorage.getItem("token")
-        }
-      }).then(res => {
-        let { data, meta } = res.data;
-        if (meta.status === 201) {
-          this.$message({
-            message: meta.msg,
-            type: "success"
+      this.$refs.ruleForm.validate(valid => {
+        if (valid) {
+          this.$http({
+            method: "post",
+            url: "/users",
+            data: this.userinfo,
+            headers: {
+              Authorization: localStorage.getItem("token")
+            }
+          }).then(res => {
+            let { data, meta } = res.data;
+            if (meta.status === 201) {
+              this.$message({
+                message: meta.msg,
+                type: "success"
+              });
+              this.adddialog = false;
+              this.getdata();
+              for (const key in this.userinfo) {
+                this.userinfo[key] = "";
+              }
+            }
           });
-          this.adddialog = false;
-          this.getdata();
-          for (const key in this.userinfo) {
-            this.userinfo[key] = "";
-          }
         }
       });
     },
+    // 删除用户
     remove(id) {
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
         confirmButtonText: "确定",
@@ -192,7 +247,7 @@ export default {
       }).then(() => {
         this.$http({
           method: "delete",
-          url: "http://localhost:8888/api/private/v1/users/" + id,
+          url: "/users/" + id,
           headers: {
             Authorization: localStorage.getItem("token")
           }
@@ -212,14 +267,12 @@ export default {
         });
       });
     },
+    // 打开修改面板并获取数据
     edit(id) {
       this.editdialog = true;
       this.$http({
         method: "get",
-        url: "http://localhost:8888/api/private/v1/users/" + id,
-        headers: {
-          Authorization: localStorage.getItem("token")
-        }
+        url: "/users/" + id
       }).then(res => {
         let { data, meta } = res.data;
         this.userinfo.id = data.id;
@@ -228,25 +281,85 @@ export default {
         this.userinfo.mobile = data.mobile;
       });
     },
-    editcancle() {
-      this.editdialog = false;
-    },
+    // 修改用户
     edituser(id) {
       id = this.userinfo.id;
+      this.$refs.ruleForm.validate(valid => {
+        if (valid) {
+          this.$http({
+            method: "put",
+            url: "/users/" + id,
+            data: this.userinfo,
+            headers: {
+              Authorization: localStorage.getItem("token")
+            }
+          }).then(res => {
+            this.$message({
+              message: "修改成功",
+              type: "success"
+            });
+            this.editdialog = false;
+            this.getdata();
+          });
+        }
+      });
+    },
+    // 状态设置
+    openOff(id, type) {
       this.$http({
         method: "put",
-        url: "http://localhost:8888/api/private/v1/users/" + id,
-        data: this.userinfo,
-        headers: {
-          Authorization: localStorage.getItem("token")
-        }
+        url: `/users/${id}/state/${type}`,
+        data: this.userinfo
       }).then(res => {
-        this.$message({
-          message: "修改成功",
-          type: "success"
+        let { data, meta } = res.data;
+        if (meta.status === 200) {
+          this.$message({
+            message: meta.msg,
+            type: "success"
+          });
+        }
+      });
+    },
+    // 角色面板打开并获取数据
+    setrule(id) {
+      this.ruledialog = true;
+      this.$http({
+        method: "get",
+        url: "/users/" + id
+      }).then(res => {
+        let { data, meta } = res.data;
+        this.ruleinfo.username = data.username;
+        this.ruleinfo.id = data.id;
+        this.ruleinfo.rid = data.rid;
+        this.$http({
+          method: "get",
+          url: "/roles",
+          headers: {
+            Authorization: localStorage.getItem("token")
+          }
+        }).then(res => {
+          let { data, meta } = res.data;
+          if (meta.status === 200) {
+            this.selectlist = data;
+          }
         });
-        this.editdialog = false;
-        this.getdata();
+      });
+    },
+    // 角色分配
+    set() {
+      this.$http({
+        method: "put",
+        url: `/users/${this.ruleinfo.id}/role`,
+        data: { rid: this.ruleinfo.rid }
+      }).then(res => {
+        let { data, meta } = res.data;
+        if (meta.status === 200) {
+          this.$message({
+            type: "success",
+            message: meta.msg
+          });
+          this.ruledialog = false;
+        }
       });
     }
   },
