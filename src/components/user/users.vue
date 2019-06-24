@@ -2,11 +2,7 @@
   <!-- 卡片 -->
   <el-card>
     <!-- 面包屑导航 -->
-    <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>用户管理</el-breadcrumb-item>
-      <el-breadcrumb-item>用户列表</el-breadcrumb-item>
-    </el-breadcrumb>
+    <mybread one="用户管理" two="用户列表"></mybread>
     <!-- 搜索区 -->
     <div style="margin-top: 15px;">
       <el-row>
@@ -21,7 +17,7 @@
       </el-row>
     </div>
     <!-- 表格区 -->
-    <el-table :data="tableData" style="width: 100%">
+    <el-table :data="tableData" style="width: 100%" border>
       <el-table-column type="index"></el-table-column>
       <el-table-column prop="username" label="姓名" width="180"></el-table-column>
       <el-table-column prop="email" label="邮箱" width="180"></el-table-column>
@@ -123,6 +119,7 @@
 </template>
 
 <script>
+import mybread from "../layout/mybread";
 export default {
   data() {
     return {
@@ -365,6 +362,9 @@ export default {
   },
   mounted() {
     this.getdata();
+  },
+  components: {
+    mybread
   }
 };
 </script>

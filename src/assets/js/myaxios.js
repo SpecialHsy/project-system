@@ -9,7 +9,7 @@ myaxios.install = function (Vue) {
     axios.defaults.baseURL = 'http://localhost:8888/api/private/v1'
     // 统一设置请求头(只会执行一次，一次设置完成后，之后的值都是一样的，所以造成login登录后重复token，要刷新获取数据)
     // axios.defaults.headers.common['Authorization'] = window.localStorage.getItem('token')
-    // 添加拦截器
+    // // 添加拦截器
     axios.interceptors.request.use(function (config) {
         // Do something before request is sent
         // console.log(config);

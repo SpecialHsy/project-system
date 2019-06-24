@@ -22,18 +22,6 @@ export default {
     tophead,
     sidebar
   },
-  methods: {
-    lode() {
-      let token = localStorage.getItem("token");
-      if (!token) {
-        this.$message.error("您还没有登录,请先登录");
-        this.$router.push("/login");
-      }
-    }
-  },
-  mounted() {
-    this.lode();
-  }
 };
 </script>
 

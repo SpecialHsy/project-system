@@ -58,8 +58,8 @@ export default {
                   message: "登录成功,欢迎回来",
                   type: "success"
                 });
-                this.$router.push("/");
                 window.localStorage.setItem("token", data.token);
+                this.$router.push("/");
               } else {
                 this.$message.error(meta.msg);
               }
