@@ -4,6 +4,7 @@ import login from '@/components/login/login.vue'
 import home from '@/components/home/home.vue'
 import users from '@/components/user/users.vue'
 import power from "../components/power/power.vue"
+import roles from "../components/roles/roles.vue"
 
 Vue.use(Router)
 
@@ -31,6 +32,11 @@ let router = new Router({
           path: '/power',
           name: 'power', // 别名
           component: power
+        },
+        {
+          path: '/roles',
+          name: 'roles', // 别名
+          component: roles
         }
       ]
     },
