@@ -1,1 +1,65 @@
-<div>哈哈哈哈</div>
+<el-card>
+    <!-- 面包屑组件传值 -->
+    <mybread one="权限管理" two="角色列表" />
+    <el-button plain class="mybtn">添加角色</el-button>
+    <!-- 表格区 -->
+    <el-table border :data="tableData" highlight-current-row style="width: 100%">
+        <el-table-column type="expand" width="50">
+            <template slot-scope='scope'>
+                <!-- 一级权限 -->
+                <el-row v-for="(item1,index1) in scope.row.children" :key='index1'>
+                    <el-col :span="4">
+                        <el-tag class="tag1" closable @close='removeTag(scope.row,item1.id)'>
+                            {{item1.authName}}
+                        </el-tag><i class="el-icon-arrow-right"></i>
+                    </el-col>
+                    <el-col :span="20">
+                        <el-row v-for="(item2,index2) in item1.children" :key='index2'>
+                            <!-- 二级权限 -->
+                            <el-col :span="5">
+                                <el-tag class="tag2" closable type="success" @close='removeTag(scope.row,item2.id)'>
+                                    {{item2.authName}}
+                                </el-tag><i class="el-icon-arrow-right"></i>
+                            </el-col>
+                            <!-- 三级权限 -->
+                            <el-col class="tag3" :span="19">
+                                <el-tag v-for="(item3,index3) in item2.children" :key='index3' closable type='warning'
+                                    @close='removeTag(scope.row,item3.id)'>
+                                    {{item3.authName}}
+                                </el-tag>
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                </el-row>
+            </template>
+        </el-table-column>
+        <el-table-column type="index" width="50">
+        </el-table-column>
+        <el-table-column property="roleName" label="角色名称" width="520">
+        </el-table-column>
+        <el-table-column property="roleDesc" label="角色描述" width="520">
+        </el-table-column>
+        <el-table-column label="操作">
+            <template slot-scope='scope'>
+                <el-row>
+                    <el-button type="primary" icon="el-icon-edit" plain></el-button>
+                    <el-button type="danger" icon="el-icon-delete" plain></el-button>
+                    <el-button type="success" icon="el-icon-check" plain @click=setpower(scope.row.children)>
+                    </el-button>
+                </el-row>
+            </template>
+        </el-table-column>
+    </el-table>
+    <el-dialog title="提示" :visible.sync="DialogVisible" width="30%">
+        <!-- data数据源，数据源一定是树形结构会自动遍历,props设置显示文本，默认label -->
+        <!-- nodekey设置唯一标识 -->
+        <!-- default-checked-keys默认勾选的节点的 key 的数组 -->
+        <el-tree :default-checked-keys='defaultcheckedkeys' node-key='id' show-checkbox default-expand-all
+            :data="rolelist" :props="defaultProps">
+        </el-tree>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="DialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="DialogVisible = false">确 定</el-button>
+        </span>
+    </el-dialog>
+</el-card>
