@@ -51,7 +51,7 @@ export default {
         method: "get",
         url: `/users?query=${this.query}&pagenum=${this.pagenum}&pagesize=${
           this.pagesize
-        }`
+          }`
       }).then(res => {
         let { data, meta } = res.data;
         if (meta.status === 200) {
@@ -241,6 +241,21 @@ export default {
   },
   mounted() {
     this.getdata();
+  },
+  watch: {
+    query(newKey, oldKey) {
+      this.$http({
+        method: 'get',
+        url: `/users?query=${newKey}&pagenum=${this.pagenum}&pagesize=${
+          this.pagesize
+          }`
+      }).then(res => {
+        let { data, meta } = res.data;
+        if (meta.status === 200) {
+          this.tableData = data.users;
+        }
+      })
+    }
   },
   components: {
     mybread
