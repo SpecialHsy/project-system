@@ -3,9 +3,10 @@ import Router from 'vue-router'
 import login from '@/components/login/login.vue'
 import home from '@/components/home/home.vue'
 import users from '@/components/user/users.vue'
-import power from "../components/power/power.vue"
-import roles from "../components/roles/roles.vue"
+import power from "@/components/power/power.vue"
+import roles from "@/components/roles/roles.vue"
 import { Message } from 'element-ui';
+import categories from "@/components/categories/categories.vue";
 
 Vue.use(Router)
 
@@ -38,6 +39,11 @@ let router = new Router({
           path: '/roles',
           name: 'roles', // 别名
           component: roles
+        },
+        {
+          path: '/categories',
+          name: 'categories', // 别名
+          component: categories
         }
       ]
     },
