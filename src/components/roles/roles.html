@@ -44,22 +44,23 @@
                 <el-row>
                     <el-button type="primary" icon="el-icon-edit" plain></el-button>
                     <el-button type="danger" icon="el-icon-delete" plain></el-button>
-                    <el-button type="success" icon="el-icon-check" plain @click=setpower(scope.row.children)>
+                    <el-button type="success" icon="el-icon-check" plain
+                        @click=getpower(scope.row.children,scope.row.id)>
                     </el-button>
                 </el-row>
             </template>
         </el-table-column>
     </el-table>
     <el-dialog title="提示" :visible.sync="DialogVisible" width="30%">
-        <!-- data数据源，数据源一定是树形结构会自动遍历,props设置显示文本，默认label -->
+        <!-- data数据源，数据源一定是树形结构会自动遍历,defaultProps设置显示文本，默认label -->
         <!-- nodekey设置唯一标识 -->
         <!-- default-checked-keys默认勾选的节点的 key 的数组 -->
-        <el-tree :default-checked-keys='defaultcheckedkeys' node-key='id' show-checkbox default-expand-all
+        <el-tree ref='mytree' :default-checked-keys='defaultcheckedkeys' node-key='id' show-checkbox default-expand-all
             :data="rolelist" :props="defaultProps">
         </el-tree>
         <span slot="footer" class="dialog-footer">
             <el-button @click="DialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="DialogVisible = false">确 定</el-button>
+            <el-button type="primary" @click='setroles'>确 定</el-button>
         </span>
     </el-dialog>
 </el-card>

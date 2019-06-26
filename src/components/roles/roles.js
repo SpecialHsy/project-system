@@ -15,7 +15,9 @@ export default {
                 children: 'children',
             },
             // 默认选中
-            defaultcheckedkeys: []
+            defaultcheckedkeys: [],
+            //  设置权限ID
+            roleId: 0
         }
     },
     methods: {
@@ -50,8 +52,10 @@ export default {
                 }
             })
         },
-        setpower(roledata) {
+        // 默认选中列表
+        getpower(roledata, Id) {
             this.defaultcheckedkeys = []
+            this.roleId = Id
             this.DialogVisible = true
             this.$http({
                 method: 'get',
@@ -70,6 +74,33 @@ export default {
                 }
             })
         },
+        setroles() {
+            // 得到全选
+            let idsAll = this.$refs.mytree.getCheckedKeys()
+            // 得到半选
+            let idsHalf = this.$refs.mytree.getHalfCheckedKeys()
+            let ids = [...idsAll, ...idsHalf]
+            ids = ids.join(',')
+            this.$http({
+                method: 'post',
+                url: `roles/${this.roleId}/rights`,
+                data: {
+                    rids: ids
+                }
+            }).then(res => {
+                let { meta } = res.data
+                if (meta.status === 200) {
+                    this.$message({
+                        type: 'success',
+                        message: meta.msg
+                    })
+                } else {
+                    this.$message.error(meta.msg)
+                }
+                this.DialogVisible = false
+                this.getrules()
+            })
+        }
     },
     mounted() {
         this.getrules()

@@ -5,6 +5,7 @@ import home from '@/components/home/home.vue'
 import users from '@/components/user/users.vue'
 import power from "../components/power/power.vue"
 import roles from "../components/roles/roles.vue"
+import { Message } from 'element-ui';
 
 Vue.use(Router)
 
@@ -48,7 +49,11 @@ router.beforeEach((to, from, next) => {
   // next后续代码
   if (to.name !== 'login') {
     let token = window.localStorage.getItem('token')
-    if (!token) { 
+    if (!token) {
+      Message({
+        message: '您还没有登录，请先登录',
+        type: 'error'
+      })
       router.push('/login')
     } else {
       next()
