@@ -111,11 +111,11 @@ export default {
     return {
       // 步骤条激活的下标s
       active: 0,
-      //默认显示的tab栏
+      // 默认显示的tab栏
       activeName: "first",
-      //级联选择器分类数据源
+      // 级联选择器分类数据源
       options: [],
-      //级联框的数据
+      // 级联框的数据
       opvalue: [],
       // 级联选择器配置项
       props: {
@@ -124,28 +124,28 @@ export default {
         value: "cat_id",
         checkStrictly: true
       },
-      //默认选中
+      // 默认选中
       checked: true,
-      //商品参数
+      // 商品参数
       goodsmany: [],
-      //商品属性
+      // 商品属性
       goodsonly: [],
-      //上传请求头
+      // 上传请求头
       postHeader: {
         Authorization: window.localStorage.getItem("token")
       },
-      //上传图片集合
+      // 上传图片集合
       fileList: [],
       // 图片预览
       imgdialog: false,
-      //双向绑定
+      // 双向绑定
       goodsobj: {
         name: "",
         price: "",
         number: "",
         weight: ""
       },
-      //验证规则
+      // 验证规则
       rules: {
         name: [{ required: true, message: "请输入商品名称", trigger: "blur" }],
         price: [{ required: true, message: "请输入商品价格", trigger: "blur" }],
@@ -161,11 +161,11 @@ export default {
     };
   },
   methods: {
-    //tab点击事件
+    // tab点击事件
     tabClick(tag) {
       // 步骤条与tag同步
       this.active = +tag.index;
-      //判断商品参数
+      // 判断商品参数
       if (tag.index === "1") {
         this.getparams("many");
       }
@@ -210,8 +210,8 @@ export default {
     },
     uploadsuccess(response, file, fileList) {
       // response上传成功后响应的信息
-      //file 上传成功后的文件信息
-      //fileList上传成功后的集合
+      // file 上传成功后的文件信息
+      // fileList上传成功后的集合
       this.fileList.push(response.data.tmp_path);
     },
     remove(file, fileList) {

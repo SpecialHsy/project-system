@@ -19,29 +19,29 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       powerList: []
-    };
-  },
-  methods: {
-    getrightsData() {
-      this.$http({
-        url: "menus"
-      }).then(res => {
-        let { meta, data } = res.data;
-        if (meta.status === 200) {
-          this.powerList = data;
-        } else {
-          this.$message.error(meta.msg);
-        }
-      });
     }
   },
-  mounted() {
-    this.getrightsData();
+  methods: {
+    getrightsData () {
+      this.$http({
+        url: 'menus'
+      }).then(res => {
+        let { meta, data } = res.data
+        if (meta.status === 200) {
+          this.powerList = data
+        } else {
+          this.$message.error(meta.msg)
+        }
+      })
+    }
+  },
+  mounted () {
+    this.getrightsData()
   }
-};
+}
 </script>
 
 <style>

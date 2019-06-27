@@ -60,12 +60,12 @@
 </template>
 
 <script>
-import mybread from "../layout/mybread";
+import mybread from '../layout/mybread'
 export default {
   components: {
     mybread
   },
-  data() {
+  data () {
     return {
       categoriesData: [],
       pagesize: 5,
@@ -73,102 +73,102 @@ export default {
       pagelist: [],
       total: 0,
       dialog: false,
-      formLabelWidth: "80px",
+      formLabelWidth: '80px',
       // 级联框数据源
       options: [],
       // 双向绑定
       selVlaue: [],
       props: {
-        expandTrigger: "hover",
-        label: "cat_name",
-        value: "cat_id",
+        expandTrigger: 'hover',
+        label: 'cat_name',
+        value: 'cat_id',
         checkStrictly: true
       },
       // 分类数据
-      className: "",
+      className: '',
       loading: true
-    };
+    }
   },
   methods: {
-    getcategories() {
+    getcategories () {
       this.$http({
-        method: "get",
-        url: "categories"
+        method: 'get',
+        url: 'categories'
       }).then(res => {
-        let { meta, data } = res.data;
+        let { meta, data } = res.data
         if (meta.status === 200) {
-          this.categoriesData = data;
+          this.categoriesData = data
           setTimeout(() => {
-            this.loading = false;
-          }, 300);
-          this.getpageList();
+            this.loading = false
+          }, 300)
+          this.getpageList()
         } else {
-          this.$message.error(meta.msg);
+          this.$message.error(meta.msg)
         }
-      });
+      })
     },
-    getpageList() {
+    getpageList () {
       // 条数公式 pagesize*(pagenum-1)~pagesize*pagenum-1,数组slice不包含停止的位数，所以不减1
-      let begin = this.pagesize * (this.pagenum - 1);
-      let end = this.pagesize * this.pagenum;
-      this.pagelist = this.categoriesData.slice(begin, end);
+      let begin = this.pagesize * (this.pagenum - 1)
+      let end = this.pagesize * this.pagenum
+      this.pagelist = this.categoriesData.slice(begin, end)
     },
-    curChange(currentpage) {
-      this.pagenum = currentpage;
-      this.getcategories();
+    curChange (currentpage) {
+      this.pagenum = currentpage
+      this.getcategories()
     },
-    sizeChange(currentsize) {
-      this.pagesize = currentsize;
-      this.getcategories();
+    sizeChange (currentsize) {
+      this.pagesize = currentsize
+      this.getcategories()
     },
-    getdbData() {
+    getdbData () {
       this.$http({
-        method: "get",
-        url: "categories?type=2"
+        method: 'get',
+        url: 'categories?type=2'
       }).then(res => {
-        let { meta, data } = res.data;
+        let { meta, data } = res.data
         if (meta.status === 200) {
-          this.options = data;
+          this.options = data
         } else {
-          this.$message.error(meta.msg);
+          this.$message.error(meta.msg)
         }
-      });
+      })
     },
-    setclass() {
+    setclass () {
       let pid =
         this.selVlaue.length === 0
           ? 0
-          : this.selVlaue[this.selVlaue.length - 1];
-      let level = this.selVlaue.length;
+          : this.selVlaue[this.selVlaue.length - 1]
+      let level = this.selVlaue.length
       this.$http({
-        method: "post",
-        url: "categories",
+        method: 'post',
+        url: 'categories',
         data: {
           cat_pid: pid,
           cat_name: this.className,
           cat_level: level
         }
       }).then(res => {
-        let { meta, data } = res.data;
+        let { meta, data } = res.data
         if (meta.status === 201) {
           this.$message({
-            type: "success",
+            type: 'success',
             message: meta.msg
-          });
-          this.dialog = false;
-          this.getdbData();
-          this.getcategories();
+          })
+          this.dialog = false
+          this.getdbData()
+          this.getcategories()
         } else {
-          this.$message.error(meta.msg);
+          this.$message.error(meta.msg)
         }
-      });
+      })
     }
   },
-  mounted() {
-    this.getcategories();
-    this.getdbData();
+  mounted () {
+    this.getcategories()
+    this.getdbData()
   }
-};
+}
 </script>
 
 <style scoped>

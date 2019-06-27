@@ -39,70 +39,70 @@
 </template>
 
 <script>
-import mybread from "../layout/mybread";
+import mybread from '../layout/mybread'
 export default {
   components: {
     mybread
   },
-  data() {
+  data () {
     return {
       tableData: [],
-      query: "",
+      query: '',
       pagenum: 1,
       pagesize: 10,
       total: 0
-    };
+    }
   },
   methods: {
-    //获取数据
-    getData() {
+    // 获取数据
+    getData () {
       this.$http({
         url: `goods?query=${this.query}&pagenum=${this.pagenum}&pagesize=${
           this.pagesize
         }`
       }).then(res => {
-        let { meta, data } = res.data;
+        let { meta, data } = res.data
         if (meta.status === 200) {
-          this.tableData = data.goods;
-          this.total = data.total;
+          this.tableData = data.goods
+          this.total = data.total
         } else {
-          this.$message.error(meta.msg);
+          this.$message.error(meta.msg)
         }
-      });
+      })
     },
-    //页容量改变
-    sizeChange(size) {
-      this.pagesize = size;
-      this.getData();
+    // 页容量改变
+    sizeChange (size) {
+      this.pagesize = size
+      this.getData()
     },
     // 页码改变
-    curChange(pagenum) {
-      this.pagenum = pagenum;
-      this.getData();
+    curChange (pagenum) {
+      this.pagenum = pagenum
+      this.getData()
     },
     // 搜索
-    search() {
-      this.getData();
+    search () {
+      this.getData()
     }
   },
-  mounted() {
-    this.getData();
+  mounted () {
+    this.getData()
   },
   watch: {
-    query(newquery, oldquery) {
+    query (newquery, oldquery) {
       this.$http({
         url: `goods?query=${newquery}&pagenum=${this.pagenum}&pagesize=${
           this.pagesize
         }`
       }).then(res => {
-        let { meta, data } = res.data;
+        let { meta, data } = res.data
         if (meta.status === 200) {
-          this.tableData = data.goods;
+          this.tableData = data.goods
         }
-      });
+      })
     }
   }
-};
+}
 </script>
 
 <style>
