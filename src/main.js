@@ -14,9 +14,7 @@ Vue.use(ElementUI)
 Vue.use(myaxios)
 Vue.component(ElTreeGrid.name, ElTreeGrid)
 
-
 Vue.config.productionTip = false
-
 
 /* eslint-disable no-new */
 new Vue({

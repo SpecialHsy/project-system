@@ -27,51 +27,51 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       userinfo: {
-        username: "",
-        password: ""
+        username: '',
+        password: ''
       },
       rules: {
         username: [
-          { required: true, message: "请输入用户名", trigger: "blur" },
-          { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" }
+          { required: true, message: '请输入用户名', trigger: 'blur' },
+          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
         ],
-        password: [{ required: true, message: "请输入密码", trigger: "blur" }]
+        password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
       }
-    };
+    }
   },
   methods: {
-    register() {
+    register () {
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
           this.$http({
-            method: "post",
-            url: "/login",
+            method: 'post',
+            url: '/login',
             data: this.userinfo
           })
             .then(res => {
-              let { data, meta } = res.data;
+              let { data, meta } = res.data
               if (meta.status == 200) {
                 this.$message({
-                  message: "登录成功,欢迎回来",
-                  type: "success"
-                });
-                window.localStorage.setItem("token", data.token);
-                this.$router.push("/");
+                  message: '登录成功,欢迎回来',
+                  type: 'success'
+                })
+                window.localStorage.setItem('token', data.token)
+                this.$router.push('/')
               } else {
-                this.$message.error(meta.msg);
+                this.$message.error(meta.msg)
               }
             })
             .catch(err => {
-              console.log(err);
-            });
+              console.log(err)
+            })
         }
-      });
+      })
     }
   }
-};
+}
 </script>
 
 <style>

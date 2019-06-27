@@ -15,35 +15,35 @@
 </template>
 
 <script>
-import mybread from "../layout/mybread";
+import mybread from '../layout/mybread'
 export default {
-  data() {
+  data () {
     return {
       tableData: []
-    };
+    }
   },
   components: {
     mybread
   },
   methods: {
-    getpower() {
+    getpower () {
       this.$http({
-        method: "get",
-        url: "rights/list"
+        method: 'get',
+        url: 'rights/list'
       }).then(res => {
-        let { data, meta } = res.data;
+        let { data, meta } = res.data
         if (meta.status === 200) {
-          this.tableData = data;
+          this.tableData = data
         } else {
-          this.$message.error(meta.msg);
+          this.$message.error(meta.msg)
         }
-      });
+      })
     }
   },
-  mounted() {
-    this.getpower();
+  mounted () {
+    this.getpower()
   }
-};
+}
 </script>
 
 <style>

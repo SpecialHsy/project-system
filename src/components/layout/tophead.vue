@@ -23,25 +23,25 @@
 <script>
 export default {
   methods: {
-    logout() {
-      this.$confirm("确认退出吗?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+    logout () {
+      this.$confirm('确认退出吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       }).then(() => {
         // 第一种
         // this.$router.push('/login')
         // 第二种
-        this.$router.push({ name: "login" });
-        window.localStorage.removeItem("token");
+        this.$router.push({ name: 'login' })
+        window.localStorage.removeItem('token')
         this.$message({
-          type: "success",
-          message: "退出成功!"
-        });
-      });
+          type: 'success',
+          message: '退出成功!'
+        })
+      })
     }
   }
-};
+}
 </script>
 
 <style>

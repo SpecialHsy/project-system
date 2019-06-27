@@ -1,75 +1,15 @@
 <template>
   <el-aside width="200px">
     <el-menu :router="true" :unique-opened="true" class="el-menu-vertical-demo">
-      <el-submenu index="1">
+      <el-submenu v-for="item in powerList" :key="item.id" :index="item.path">
         <template slot="title">
           <i class="el-icon-location"></i>
-          <span>用户管理</span>
+          <span>{{item.authName}}</span>
         </template>
         <el-menu-item-group>
-          <el-menu-item index="/users">
+          <el-menu-item v-for="value in item.children" :key="value.id" :index="value.path">
             <i class="el-icon-menu"></i>
-            用户列表
-          </el-menu-item>
-        </el-menu-item-group>
-      </el-submenu>
-      <el-submenu index="2">
-        <template slot="title">
-          <i class="el-icon-location"></i>
-          <span>权限管理</span>
-        </template>
-        <el-menu-item-group>
-          <el-menu-item index="/roles">
-            <i class="el-icon-menu"></i>
-            角色列表
-          </el-menu-item>
-          <el-menu-item index="/power">
-            <i class="el-icon-menu"></i>
-            权限列表
-          </el-menu-item>
-        </el-menu-item-group>
-      </el-submenu>
-      <el-submenu index="3">
-        <template slot="title">
-          <i class="el-icon-location"></i>
-          <span>商品管理</span>
-        </template>
-        <el-menu-item-group>
-          <el-menu-item index="3-1">
-            <i class="el-icon-menu"></i>
-            商品列表
-          </el-menu-item>
-          <el-menu-item index="3-2">
-            <i class="el-icon-menu"></i>
-            分类参数
-          </el-menu-item>
-          <el-menu-item index="/categories">
-            <i class="el-icon-menu"></i>
-            商品分类
-          </el-menu-item>
-        </el-menu-item-group>
-      </el-submenu>
-      <el-submenu index="4">
-        <template slot="title">
-          <i class="el-icon-location"></i>
-          <span>订单管理</span>
-        </template>
-        <el-menu-item-group>
-          <el-menu-item index="4-1">
-            <i class="el-icon-menu"></i>
-            订单列表
-          </el-menu-item>
-        </el-menu-item-group>
-      </el-submenu>
-      <el-submenu index="5">
-        <template slot="title">
-          <i class="el-icon-location"></i>
-          <span>数据统计</span>
-        </template>
-        <el-menu-item-group>
-          <el-menu-item index="4-1">
-            <i class="el-icon-menu"></i>
-            数据报表
+            {{value.authName}}
           </el-menu-item>
         </el-menu-item-group>
       </el-submenu>
@@ -78,7 +18,30 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      powerList: []
+    };
+  },
+  methods: {
+    getrightsData() {
+      this.$http({
+        url: "menus"
+      }).then(res => {
+        let { meta, data } = res.data;
+        if (meta.status === 200) {
+          this.powerList = data;
+        } else {
+          this.$message.error(meta.msg);
+        }
+      });
+    }
+  },
+  mounted() {
+    this.getrightsData();
+  }
+};
 </script>
 
 <style>

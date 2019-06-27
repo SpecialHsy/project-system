@@ -15,14 +15,14 @@
 </template>
 
 <script>
-import tophead from "@/components/layout/tophead";
-import sidebar from "@/components/layout/sidebar";
+import tophead from '@/components/layout/tophead'
+import sidebar from '@/components/layout/sidebar'
 export default {
   components: {
     tophead,
     sidebar
-  },
-};
+  }
+}
 </script>
 
 <style>

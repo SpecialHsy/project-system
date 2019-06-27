@@ -3,10 +3,10 @@ import Router from 'vue-router'
 import login from '@/components/login/login.vue'
 import home from '@/components/home/home.vue'
 import users from '@/components/user/users.vue'
-import power from "@/components/power/power.vue"
-import roles from "@/components/roles/roles.vue"
-import { Message } from 'element-ui';
-import categories from "@/components/categories/categories.vue";
+import power from '@/components/power/power.vue'
+import roles from '@/components/roles/roles.vue'
+import { Message } from 'element-ui'
+import categories from '@/components/categories/categories.vue'
 
 Vue.use(Router)
 
@@ -31,7 +31,7 @@ let router = new Router({
           component: users
         },
         {
-          path: '/power',
+          path: '/rights',
           name: 'power', // 别名
           component: power
         },
@@ -46,7 +46,7 @@ let router = new Router({
           component: categories
         }
       ]
-    },
+    }
   ]
 })
 router.beforeEach((to, from, next) => {

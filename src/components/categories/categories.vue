@@ -98,7 +98,9 @@ export default {
         let { meta, data } = res.data;
         if (meta.status === 200) {
           this.categoriesData = data;
-          setTimeout((this.loading = false), 1000);
+          setTimeout(() => {
+            this.loading = false;
+          }, 500);
           this.getpageList();
         } else {
           this.$message.error(meta.msg);
