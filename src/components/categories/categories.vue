@@ -100,7 +100,7 @@ export default {
           this.categoriesData = data;
           setTimeout(() => {
             this.loading = false;
-          }, 500);
+          }, 300);
           this.getpageList();
         } else {
           this.$message.error(meta.msg);

@@ -1,15 +1,15 @@
 import mybread from '../layout/mybread'
 export default {
-  data () {
+  data() {
     return {
       tableData: [],
       query: '',
       // 当前页
       pagenum: 1,
       // 页容量
-      pagesize: 5,
+      pagesize: 10,
       // 页容量选项
-      pagesizes: [3, 5, 10],
+      pagesizes: [5, 10, 15],
       // 总条数
       total: 0,
       // 对话框
@@ -46,12 +46,12 @@ export default {
   },
   methods: {
     // 获取数据并渲染
-    getdata () {
+    getdata() {
       this.$http({
         method: 'get',
         url: `/users?query=${this.query}&pagenum=${this.pagenum}&pagesize=${
           this.pagesize
-        }`
+          }`
       }).then(res => {
         let { data, meta } = res.data
         if (meta.status === 200) {
@@ -66,28 +66,28 @@ export default {
       })
     },
     // 页码更改
-    currPage (currentPage) {
+    currPage(currentPage) {
       this.pagenum = currentPage
       this.getdata()
     },
     // 页容量更改
-    sizeChange (size) {
+    sizeChange(size) {
       this.pagesize = size
       this.getdata()
     },
     // 搜索
-    search () {
+    search() {
       this.getdata()
     },
     // 打开添加面板
-    open () {
+    open() {
       this.adddialog = true
       for (const key in this.userinfo) {
         this.userinfo[key] = ''
       }
     },
     // 添加用户
-    adduser () {
+    adduser() {
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
           this.$http({
@@ -115,7 +115,7 @@ export default {
       })
     },
     // 删除用户
-    remove (id) {
+    remove(id) {
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -144,7 +144,7 @@ export default {
       })
     },
     // 打开修改面板并获取数据
-    edit (id) {
+    edit(id) {
       this.editdialog = true
       this.$http({
         method: 'get',
@@ -158,7 +158,7 @@ export default {
       })
     },
     // 修改用户
-    edituser (id) {
+    edituser(id) {
       id = this.userinfo.id
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
@@ -181,7 +181,7 @@ export default {
       })
     },
     // 状态设置
-    openOff (id, type) {
+    openOff(id, type) {
       this.$http({
         method: 'put',
         url: `/users/${id}/state/${type}`,
@@ -197,7 +197,7 @@ export default {
       })
     },
     // 角色面板打开并获取数据
-    setrule (id) {
+    setrule(id) {
       this.ruledialog = true
       this.$http({
         method: 'get',
@@ -222,7 +222,7 @@ export default {
       })
     },
     // 角色分配
-    set () {
+    set() {
       this.$http({
         method: 'put',
         url: `/users/${this.ruleinfo.id}/role`,
@@ -239,16 +239,16 @@ export default {
       })
     }
   },
-  mounted () {
+  mounted() {
     this.getdata()
   },
   watch: {
-    query (newKey, oldKey) {
+    query(newKey, oldKey) {
       this.$http({
         method: 'get',
         url: `/users?query=${newKey}&pagenum=${this.pagenum}&pagesize=${
           this.pagesize
-        }`
+          }`
       }).then(res => {
         let { data, meta } = res.data
         if (meta.status === 200) {
