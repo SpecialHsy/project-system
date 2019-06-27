@@ -5,11 +5,11 @@
       <el-row>
         <el-col :span="6">
           <el-input placeholder="请输入内容" class="input-with-select" v-model="query">
-            <el-button slot="append" icon="el-icon-search" @click.prevent="search"></el-button>
+            <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
           </el-input>
         </el-col>
         <el-col :span="4">
-          <el-button type="success" plain>添加商品</el-button>
+          <el-button type="success" plain @click="$router.push('/goodsAdd')">添加商品</el-button>
         </el-col>
       </el-row>
     </div>
@@ -54,6 +54,7 @@ export default {
     };
   },
   methods: {
+    //获取数据
     getData() {
       this.$http({
         url: `goods?query=${this.query}&pagenum=${this.pagenum}&pagesize=${
@@ -69,14 +70,17 @@ export default {
         }
       });
     },
+    //页容量改变
     sizeChange(size) {
       this.pagesize = size;
       this.getData();
     },
+    // 页码改变
     curChange(pagenum) {
       this.pagenum = pagenum;
       this.getData();
     },
+    // 搜索
     search() {
       this.getData();
     }
