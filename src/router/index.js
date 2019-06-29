@@ -1,21 +1,26 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import login from '@/components/login/login.vue'
-import home from '@/components/home/home.vue'
-import users from '@/components/user/users.vue'
-import power from '@/components/power/power.vue'
-import roles from '@/components/roles/roles.vue'
 import { Message } from 'element-ui'
-import categories from '@/components/categories/categories.vue'
-import goods from '@/components/goods/goods.vue'
-import goodsAdd from '@/components/goodsAdd/goodsAdd.vue'
+
+// 路由文件
+const login = () => import('@/components/login/login.vue')
+const home = () => import('@/components/home/home.vue')
+const users = () => import('@/components/user/users.vue')
+const power = () => import('@/components/power/power.vue')
+const roles = () => import('@/components/roles/roles.vue')
+const categories = () => import('@/components/categories/categories.vue')
+const goods = () => import('@/components/goods/goods.vue')
+const goodsAdd = () => import('@/components/goodsAdd/goodsAdd.vue')
+const orders = () => import('@/components/orders/orders.vue')
+const reports = () => import('@/components/reports/reports.vue')
 
 Vue.use(Router)
 
 let router = new Router({
   routes: [
     {
-      path: '/', redirect: '/home'
+      path: '/',
+      redirect: '/home'
     },
     {
       path: '/login',
@@ -56,6 +61,16 @@ let router = new Router({
           path: '/goodsAdd',
           name: 'goodsAdd', // 别名
           component: goodsAdd
+        },
+        {
+          path: '/orders',
+          name: 'orders', // 别名
+          component: orders
+        },
+        {
+          path: '/reports',
+          name: 'reports', // 别名
+          component: reports
         }
       ]
     }

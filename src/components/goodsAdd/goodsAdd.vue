@@ -1,6 +1,6 @@
 <template>
   <el-card>
-    <mybread one="商品列表" two="商品管理"/>
+    <mybread one="商品列表" two="商品管理" />
     <!-- 提示框 -->
     <el-alert style="margin: 20px 0;" title="添加商品信息" type="info" center show-icon></el-alert>
     <!-- active:激活步骤 finish-status:完成状态-->
@@ -21,20 +21,20 @@
           ref="ruleForm"
           label-width="100px"
           class="demo-ruleForm"
-          :rules="rules"
           :model="goodsobj"
+          :rules="rules"
         >
           <el-form-item label="商品名称" prop="name">
-            <el-input v-model="goodsobj.name"></el-input>
+            <el-input v-model="goodsobj.goods_name"></el-input>
           </el-form-item>
           <el-form-item label="商品价格" prop="price">
-            <el-input v-model="goodsobj.price"></el-input>
+            <el-input v-model="goodsobj.goods_price"></el-input>
           </el-form-item>
           <el-form-item label="商品重量" prop="weight">
-            <el-input v-model="goodsobj.weight"></el-input>
+            <el-input v-model="goodsobj.goods_weight"></el-input>
           </el-form-item>
           <el-form-item label="商品数量" prop="number">
-            <el-input v-model.number="goodsobj.number"></el-input>
+            <el-input v-model.number="goodsobj.goods_number"></el-input>
           </el-form-item>
           <el-form-item label="商品分类" prop="class">
             {{opvalue}}
@@ -88,11 +88,15 @@
           <el-button size="small" type="primary">点击上传</el-button>
         </el-upload>
       </el-tab-pane>
-      <el-tab-pane label="商品内容" name="fifth">商品内容</el-tab-pane>
+      <el-tab-pane label="商品内容" name="fifth">
+        <el-button type="primary" @click="addgoods">添加商品</el-button>
+        <!-- 引入富文本 -->
+        <quill-editor v-model="content" ref="myQuillEditor"></quill-editor>
+      </el-tab-pane>
     </el-tabs>
     <!-- 预览图片 -->
     <el-dialog title="提示" :visible.sync="imgdialog" width="30%">
-      <img ref="imglink" src alt>
+      <img ref="imglink" src alt />
       <span slot="footer" class="dialog-footer">
         <el-button @click="imgdialog = false">取 消</el-button>
         <el-button type="primary" @click="imgdialog = false">确 定</el-button>
@@ -140,11 +144,14 @@ export default {
       imgdialog: false,
       // 双向绑定
       goodsobj: {
-        name: '',
-        price: '',
-        number: '',
-        weight: ''
+        goods_name: '',
+        goods_price: '',
+        goods_number: '',
+        goods_weight: '',
+        goods_cat: '',
+        goods_introduce: ''
       },
+      content: '',
       // 验证规则
       rules: {
         name: [{ required: true, message: '请输入商品名称', trigger: 'blur' }],
@@ -230,6 +237,25 @@ export default {
       this.$nextTick(() => {
         this.$refs.imglink.src = img
       })
+    },
+    addgoods () {
+      this.goodsobj.goods_cat = this.opvalue.join(',')
+      this.$http({
+        method: 'post',
+        url: 'goods',
+        data: {
+          ...this.goodsobj,
+          goods_introduce: this.content
+        }
+      }).then(res => {
+        let { meta } = res.data
+        if (meta.status === 201) {
+          this.$message.success(meta.msg)
+          this.$router.push('/goods')
+        } else {
+          this.$message.error(meta.msg)
+        }
+      })
     }
   },
   mounted () {
@@ -247,5 +273,11 @@ h5 {
 }
 .el-checkbox {
   margin-right: 0;
+}
+.el-steps--horizontal {
+  margin-bottom: 20px;
+}
+.ql-container.ql-snow {
+  height: 376px;
 }
 </style>

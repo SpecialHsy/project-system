@@ -1,6 +1,6 @@
 <template>
   <el-card>
-    <mybread one="商品列表" two="商品管理"/>
+    <mybread one="商品列表" two="商品管理" />
     <div style="margin-top: 15px;">
       <el-row>
         <el-col :span="6">
@@ -18,7 +18,9 @@
       <el-table-column property="goods_name" label="商品名称" width="520"></el-table-column>
       <el-table-column property="goods_price" label="商品价格(元)"></el-table-column>
       <el-table-column property="goods_weight" label="商品重量"></el-table-column>
-      <el-table-column property="add_time" label="创建时间"></el-table-column>
+      <el-table-column label="创建时间">
+        <template slot-scope="scope">{{scope.row.add_time | dateFormat}}</template>
+      </el-table-column>
       <el-table-column label="操作">
         <template>
           <el-button type="primary" icon="el-icon-edit" plain></el-button>
