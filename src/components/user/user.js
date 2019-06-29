@@ -49,13 +49,11 @@ export default {
     getdata () {
       this.$http({
         method: 'get',
-        url: `/users?query=${this.query}&pagenum=${this.pagenum}&pagesize=${
-          this.pagesize
-        }`
+        url: `/users?query=${this.query}&pagenum=${this.pagenum}&pagesize=${this.pagesize}`
       }).then(res => {
         let { data, meta } = res.data
         if (meta.status === 200) {
-          if (data.users.length === 0 && this.pagenum != 1) {
+          if (data.users.length === 0 && this.pagenum !== 1) {
             this.pagenum--
             this.getdata()
             return
@@ -98,7 +96,7 @@ export default {
               Authorization: localStorage.getItem('token')
             }
           }).then(res => {
-            let { data, meta } = res.data
+            let { meta } = res.data
             if (meta.status === 201) {
               this.$message({
                 message: meta.msg,
@@ -109,6 +107,8 @@ export default {
               for (const key in this.userinfo) {
                 this.userinfo[key] = ''
               }
+            } else {
+              this.$message.error(meta.msg)
             }
           })
         }
@@ -128,9 +128,9 @@ export default {
             Authorization: localStorage.getItem('token')
           }
         }).then(res => {
-          let { data, meta } = res.data
+          let { meta } = res.data
           if (meta.status === 200) {
-            if (this.total == 6) {
+            if (this.total === 6) {
               this.pagenum = 1
               this.getdata()
             }
@@ -139,6 +139,8 @@ export default {
               type: 'success',
               message: '删除成功!'
             })
+          } else {
+            this.$message.error(meta.msg)
           }
         })
       })
@@ -151,10 +153,14 @@ export default {
         url: '/users/' + id
       }).then(res => {
         let { data, meta } = res.data
-        this.userinfo.id = data.id
-        this.userinfo.username = data.username
-        this.userinfo.email = data.email
-        this.userinfo.mobile = data.mobile
+        if (meta.status === 200) {
+          this.userinfo.id = data.id
+          this.userinfo.username = data.username
+          this.userinfo.email = data.email
+          this.userinfo.mobile = data.mobile
+        } else {
+          this.$message.error(meta.msg)
+        }
       })
     },
     // 修改用户
@@ -187,12 +193,14 @@ export default {
         url: `/users/${id}/state/${type}`,
         data: this.userinfo
       }).then(res => {
-        let { data, meta } = res.data
+        let { meta } = res.data
         if (meta.status === 200) {
           this.$message({
             message: meta.msg,
             type: 'success'
           })
+        } else {
+          this.$message.error(meta.msg)
         }
       })
     },
@@ -204,21 +212,27 @@ export default {
         url: '/users/' + id
       }).then(res => {
         let { data, meta } = res.data
-        this.ruleinfo.username = data.username
-        this.ruleinfo.id = data.id
-        this.ruleinfo.rid = data.rid
-        this.$http({
-          method: 'get',
-          url: '/roles',
-          headers: {
-            Authorization: localStorage.getItem('token')
-          }
-        }).then(res => {
-          let { data, meta } = res.data
-          if (meta.status === 200) {
-            this.selectlist = data
-          }
-        })
+        if (meta.status === 200) {
+          this.ruleinfo.username = data.username
+          this.ruleinfo.id = data.id
+          this.ruleinfo.rid = data.rid
+          this.$http({
+            method: 'get',
+            url: '/roles',
+            headers: {
+              Authorization: localStorage.getItem('token')
+            }
+          }).then(res => {
+            let { data, meta } = res.data
+            if (meta.status === 200) {
+              this.selectlist = data
+            } else {
+              this.$message.error(meta.msg)
+            }
+          })
+        } else {
+          this.$message.error(meta.msg)
+        }
       })
     },
     // 角色分配
@@ -228,7 +242,7 @@ export default {
         url: `/users/${this.ruleinfo.id}/role`,
         data: { rid: this.ruleinfo.rid }
       }).then(res => {
-        let { data, meta } = res.data
+        let { meta } = res.data
         if (meta.status === 200) {
           this.$message({
             type: 'success',
@@ -246,9 +260,7 @@ export default {
     query (newKey, oldKey) {
       this.$http({
         method: 'get',
-        url: `/users?query=${newKey}&pagenum=${this.pagenum}&pagesize=${
-          this.pagesize
-        }`
+        url: `/users?query=${newKey}&pagenum=${this.pagenum}&pagesize=${this.pagesize}`
       }).then(res => {
         let { data, meta } = res.data
         if (meta.status === 200) {
