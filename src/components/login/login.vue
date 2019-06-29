@@ -53,7 +53,7 @@ export default {
           })
             .then(res => {
               let { data, meta } = res.data
-              if (meta.status == 200) {
+              if (meta.status === 200) {
                 this.$message({
                   message: '登录成功,欢迎回来',
                   type: 'success'
