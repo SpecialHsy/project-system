@@ -1,9 +1,10 @@
+/* eslint-disable space-before-function-paren */
 import mybread from '../layout/mybread.vue'
 export default {
   components: {
     mybread
   },
-  data () {
+  data() {
     return {
       tableData: [],
       DialogVisible: false,
@@ -21,7 +22,7 @@ export default {
     }
   },
   methods: {
-    getrules () {
+    getrules() {
       this.$http({
         method: 'get',
         url: 'roles'
@@ -32,7 +33,7 @@ export default {
         }
       })
     },
-    removeTag (role, rightId) {
+    removeTag(role, rightId) {
       this.$http({
         method: 'delete',
         url: `/roles/${role.id}/rights/${rightId}`
@@ -43,7 +44,7 @@ export default {
             type: 'success',
             message: meta.msg
           })
-          role.children = data.data
+          role.children = data
         } else {
           this.$message({
             type: 'error',
@@ -53,7 +54,7 @@ export default {
       })
     },
     // 默认选中列表
-    getpower (roledata, Id) {
+    getpower(roledata, Id) {
       this.defaultcheckedkeys = []
       this.roleId = Id
       this.DialogVisible = true
@@ -74,7 +75,7 @@ export default {
         }
       })
     },
-    setroles () {
+    setroles() {
       // 得到全选
       let idsAll = this.$refs.mytree.getCheckedKeys()
       // 得到半选
@@ -102,7 +103,7 @@ export default {
       })
     }
   },
-  mounted () {
+  mounted() {
     this.getrules()
   }
 }

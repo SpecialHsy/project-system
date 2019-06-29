@@ -102,26 +102,26 @@
 </template>
 
 <script>
-import mybread from "../layout/mybread";
+import mybread from '../layout/mybread'
 export default {
   components: {
     mybread
   },
-  data() {
+  data () {
     return {
       // 步骤条激活的下标s
       active: 0,
       // 默认显示的tab栏
-      activeName: "first",
+      activeName: 'first',
       // 级联选择器分类数据源
       options: [],
       // 级联框的数据
       opvalue: [],
       // 级联选择器配置项
       props: {
-        expandTrigger: "hover",
-        label: "cat_name",
-        value: "cat_id",
+        expandTrigger: 'hover',
+        label: 'cat_name',
+        value: 'cat_id',
         checkStrictly: true
       },
       // 默认选中
@@ -132,7 +132,7 @@ export default {
       goodsonly: [],
       // 上传请求头
       postHeader: {
-        Authorization: window.localStorage.getItem("token")
+        Authorization: window.localStorage.getItem('token')
       },
       // 上传图片集合
       fileList: [],
@@ -140,102 +140,102 @@ export default {
       imgdialog: false,
       // 双向绑定
       goodsobj: {
-        name: "",
-        price: "",
-        number: "",
-        weight: ""
+        name: '',
+        price: '',
+        number: '',
+        weight: ''
       },
       // 验证规则
       rules: {
-        name: [{ required: true, message: "请输入商品名称", trigger: "blur" }],
-        price: [{ required: true, message: "请输入商品价格", trigger: "blur" }],
+        name: [{ required: true, message: '请输入商品名称', trigger: 'blur' }],
+        price: [{ required: true, message: '请输入商品价格', trigger: 'blur' }],
         weight: [
-          { required: true, message: "请输入商品重量", trigger: "blur" }
+          { required: true, message: '请输入商品重量', trigger: 'blur' }
         ],
         number: [
-          { required: true, message: "请输入商品数量", trigger: "blur" },
-          { type: "number", message: "商品数量必须为数字值" }
+          { required: true, message: '请输入商品数量', trigger: 'blur' },
+          { type: 'number', message: '商品数量必须为数字值' }
         ],
-        class: [{ required: true, message: "请输入商品分类", trigger: "blur" }]
+        class: [{ required: true, message: '请输入商品分类', trigger: 'blur' }]
       }
-    };
+    }
   },
   methods: {
     // tab点击事件
-    tabClick(tag) {
+    tabClick (tag) {
       // 步骤条与tag同步
-      this.active = +tag.index;
+      this.active = +tag.index
       // 判断商品参数
-      if (tag.index === "1") {
-        this.getparams("many");
+      if (tag.index === '1') {
+        this.getparams('many')
       }
-      if (tag.index === "2") {
-        this.getparams("only");
+      if (tag.index === '2') {
+        this.getparams('only')
       }
     },
     // 获取商品参数属性
-    getparams(sel) {
+    getparams (sel) {
       if (this.opvalue.length !== 0) {
         this.$http({
           url: `categories/
             ${this.opvalue[this.opvalue.length - 1]}/attributes?sel=${sel}`
         }).then(res => {
-          let { meta, data } = res.data;
+          let { meta, data } = res.data
           if (meta.status === 200) {
-            if (sel == "many") {
-              this.goodsmany = data;
+            if (sel === 'many') {
+              this.goodsmany = data
             } else {
-              this.goodsonly = data;
+              this.goodsonly = data
             }
           } else {
-            this.$message.error(meta.msg);
+            this.$message.error(meta.msg)
           }
-        });
+        })
       } else {
-        this.$message.error("请选择商品分类");
+        this.$message.error('请选择商品分类')
       }
     },
     // 获取商品数据
-    getgoods() {
+    getgoods () {
       this.$http({
-        url: "categories"
+        url: 'categories'
       }).then(res => {
-        let { data, meta } = res.data;
+        let { data, meta } = res.data
         if (meta.status === 200) {
-          this.options = data;
+          this.options = data
         } else {
-          this.$message.error(meta.msg);
+          this.$message.error(meta.msg)
         }
-      });
+      })
     },
-    uploadsuccess(response, file, fileList) {
+    uploadsuccess (response, file, fileList) {
       // response上传成功后响应的信息
       // file 上传成功后的文件信息
       // fileList上传成功后的集合
-      this.fileList.push(response.data.tmp_path);
+      this.fileList.push(response.data.tmp_path)
     },
-    remove(file, fileList) {
-      let img = file.response.data.tmp_path;
+    remove (file, fileList) {
+      let img = file.response.data.tmp_path
       this.fileList.forEach((item, index) => {
-        if (item == img) {
-          this.fileList.splice(index, 1);
+        if (item === img) {
+          this.fileList.splice(index, 1)
         }
-      });
+      })
     },
     // 图片预览
-    seeimg(file) {
-      let img = file.response.data.url;
+    seeimg (file) {
+      let img = file.response.data.url
       // 数据获取是异步的，执行时数据还没渲染到
-      this.imgdialog = true;
+      this.imgdialog = true
       this.$nextTick(() => {
-        this.$refs.imglink.src = img;
-      });
+        this.$refs.imglink.src = img
+      })
     }
   },
-  mounted() {
-    this.getgoods();
+  mounted () {
+    this.getgoods()
   }
-};
+}
 </script>
 
 <style>

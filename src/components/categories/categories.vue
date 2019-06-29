@@ -149,7 +149,7 @@ export default {
           cat_level: level
         }
       }).then(res => {
-        let { meta, data } = res.data
+        let { meta } = res.data
         if (meta.status === 201) {
           this.$message({
             type: 'success',

@@ -6,8 +6,16 @@
   <div style="margin-top: 15px;">
     <el-row>
       <el-col :span="6">
-        <el-input placeholder="请输入内容" class="input-with-select" v-model="query">
-          <el-button slot="append" icon="el-icon-search" @click.prevent="search"></el-button>
+        <el-input
+          placeholder="请输入内容"
+          class="input-with-select"
+          v-model="query"
+        >
+          <el-button
+            slot="append"
+            icon="el-icon-search"
+            @click.prevent="search"
+          ></el-button>
         </el-input>
       </el-col>
       <el-col :span="4">
@@ -24,27 +32,57 @@
     <el-table-column label="用户状态" width="80">
       <template slot-scope="scope">
         <!-- {{scope.row}} -->
-        <el-switch v-model="scope.row.mg_state" active-color="#13ce66" inactive-color="#ff4949"
-          @change="openOff(scope.row.id,scope.row.mg_state)"></el-switch>
+        <el-switch
+          v-model="scope.row.mg_state"
+          active-color="#13ce66"
+          inactive-color="#ff4949"
+          @change="openOff(scope.row.id,scope.row.mg_state)"
+        ></el-switch>
       </template>
     </el-table-column>
     <el-table-column label="操作">
       <template slot-scope="scope">
         <el-row>
-          <el-button type="primary" icon="el-icon-edit" plain @click="edit(scope.row.id)"></el-button>
-          <el-button type="danger" icon="el-icon-delete" plain @click="remove(scope.row.id)"></el-button>
-          <el-button type="success" icon="el-icon-check" plain @click="setrule(scope.row.id)"></el-button>
+          <el-button
+            type="primary"
+            icon="el-icon-edit"
+            plain
+            @click="edit(scope.row.id)"
+          ></el-button>
+          <el-button
+            type="danger"
+            icon="el-icon-delete"
+            plain
+            @click="remove(scope.row.id)"
+          ></el-button>
+          <el-button
+            type="success"
+            icon="el-icon-check"
+            plain
+            @click="setrule(scope.row.id)"
+          ></el-button>
         </el-row>
       </template>
     </el-table-column>
   </el-table>
   <!-- 分页区 -->
-  <el-pagination @current-change="currPage" @size-change="sizeChange" :current-page="pagenum" :page-sizes="pagesizes"
-    :page-size="pagesize" :total="total" layout="total, sizes, prev, pager, next, jumper"></el-pagination>
+  <el-pagination
+    @current-change="currPage"
+    @size-change="sizeChange"
+    :current-page="pagenum"
+    :page-sizes="pagesizes"
+    :page-size="pagesize"
+    :total="total"
+    layout="total, sizes, prev, pager, next, jumper"
+  ></el-pagination>
   <!-- 对话框 -->
   <el-dialog title="添加用户" :visible.sync="adddialog">
     <el-form :model="userinfo" ref="ruleForm" :rules="rules">
-      <el-form-item label="用户名" :label-width="formLabelWidth" prop="username">
+      <el-form-item
+        label="用户名"
+        :label-width="formLabelWidth"
+        prop="username"
+      >
         <el-input autocomplete="off" v-model="userinfo.username"></el-input>
       </el-form-item>
       <el-form-item label="密码" :label-width="formLabelWidth" prop="password">
@@ -64,9 +102,17 @@
   </el-dialog>
   <el-dialog title="修改用户" :visible.sync="editdialog">
     <el-form :model="userinfo" ref="ruleForm" :rules="rules">
-      <el-input autocomplete="off" v-model="userinfo.id" type="hidden"></el-input>
+      <el-input
+        autocomplete="off"
+        v-model="userinfo.id"
+        type="hidden"
+      ></el-input>
       <el-form-item label="用户名" :label-width="formLabelWidth">
-        <el-input autocomplete="off" v-model="userinfo.username" disabled></el-input>
+        <el-input
+          autocomplete="off"
+          v-model="userinfo.username"
+          disabled
+        ></el-input>
       </el-form-item>
       <el-form-item label="邮箱" :label-width="formLabelWidth" prop="email">
         <el-input autocomplete="off" v-model="userinfo.email"></el-input>
@@ -83,13 +129,23 @@
   <el-dialog title="分配角色" :visible.sync="ruledialog">
     <el-form :model="ruleinfo">
       <el-form-item label="用户名" :label-width="formLabelWidth">
-        {{ruleinfo.username}}
-        <el-input autocomplete="off" v-model="ruleinfo.username" :disabled="true" type="hidden"></el-input>
+        {{ ruleinfo.username }}
+        <el-input
+          autocomplete="off"
+          v-model="ruleinfo.username"
+          :disabled="true"
+          type="hidden"
+        ></el-input>
       </el-form-item>
       <el-form-item label="选择角色" label-width="90px">
         <el-select v-model="ruleinfo.rid" placeholder="请选择">
           <el-option label="请选择" :value="-1"></el-option>
-          <el-option v-for="item in selectlist" :key="item.id" :label="item.roleName" :value="item.id"></el-option>
+          <el-option
+            v-for="item in selectlist"
+            :key="item.id"
+            :label="item.roleName"
+            :value="item.id"
+          ></el-option>
         </el-select>
       </el-form-item>
     </el-form>
