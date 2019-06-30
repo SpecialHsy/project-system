@@ -25,7 +25,7 @@ module.exports = {
     app: './src/main.js'
   },
   externals: {
-    'BMap': 'BMap',
+    "BMap": "BMap",
     'vue': 'Vue'
   },
   output: {
