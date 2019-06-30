@@ -92,15 +92,16 @@ export default {
     map.addControl(new BMap.OverviewMapControl())
     map.addControl(new BMap.MapTypeControl())
 
-    var driving = new BMap.DrivingRoute(map, {
-      renderOptions: {
-        map: map,
-        autoViewport: true
-      }
-    })
-    var start = new BMap.Point(116.310791, 40.003419)
-    var end = new BMap.Point(118.182, 25.0588)
-    driving.search(start, end)
+    // 驾车路线
+    // var driving = new BMap.DrivingRoute(map, {
+    //   renderOptions: {
+    //     map: map,
+    //     autoViewport: true
+    //   }
+    // })
+    // var start = new BMap.Point(116.310791, 40.003419)
+    // var end = new BMap.Point(118.182, 25.0588)
+    // driving.search(start, end)
   }
 }
 </script>
